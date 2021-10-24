@@ -21,6 +21,7 @@
 
   <!-- elv-client-js -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@eluvio/elv-client-js@latest/dist/ElvClient-min.js"></script>
+  <script type="text/javascript" src="upload.js"></script>
 
   <style>
     /*start AlwaysShowUI*/
@@ -114,15 +115,20 @@
 </head>
 
 <body>
-  <div id="error-message"></div>
-  <div class="controls">
+  <div style="position:fixed;z-index: 100;top: 0;left: 0;background-color: white;">
+    <input type="file" id="uploadVid"/>
+    <button onclick="uploadFile()">Upload</button>
+  </div>
+  <div id="error-message">
+  </div>
+  <div class="controls" style="display: none">
     <div id="bitrate"></div>
-    <div class="actions">
+    <div class="actions" style="display:none">
       <button id="select-hls-dash">hls.js / dashjs</button>
       <button id="select-bitmovin">Bitmovin</button>
     </div>
 
-    <div class="actions">
+    <div class="actions" style="display:none">
       <button id="load-hls">Play HLS Clear</button>
       <button id="load-hls-aes">Play HLS AES-128</button>
       <button id="load-hls-sample-aes">Play HLS Sample AES</button>
@@ -138,15 +144,15 @@
         placeholder="Config URL">
       <input
         id="private-key"
-        value=""
+        value="0xe05e2a00143cfc2b3d0421a59afdfb81b0913a3451ffe940f074c2cb2c0ce794"
         placeholder="Private Key">
       <input
         id="content-id"
-        value=""
+        value="hq__LZokHcpuF5gFxhcrLWVp1wGxVRW5Rx5R4zSfdqxuFqeLadgvaACC8drRgfKgqkzKqNMoZ7WMHj"
         placeholder="Object ID or Version Hash">
-    </div>
+      </div>
 
-    <div class="input-container">
+    <div class="input-container" style="display: none;">
       <label for="player-configuration">Player Configuration</label>
       <textarea id="player-configuration" placeholder="Player Configuration"></textarea>
     </div>
@@ -469,8 +475,10 @@
 
     document.getElementById("load-button").onclick = () => Load();
 
-    UpdateButtons();
+    SetOptions("dash", "widevine");
+    Load();
   </script>
+
 </body>
 
 </html>
