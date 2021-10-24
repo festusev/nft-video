@@ -27,7 +27,7 @@ async function uploadToEluvio(arrayBuffer) {
     // all use of the private key is done on the client.
     const wallet = client.GenerateWallet();
     const signer = wallet.AddAccount({
-        privateKey: "0x8145fe8c6bbf6e058fc2183ad8c6d4942a3d41ea5920b260dbf5beea06e3041b"
+        privateKey: ""
     });
 
     client.SetSigner({signer});
