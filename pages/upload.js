@@ -1,15 +1,22 @@
-// https://github.com/eluv-io/elv-client-js
+function uploadFile() {
+    console.log("uploading file");
+    let file = document.getElementById("uploadVid").files[0];
+    let reader = new FileReader();
+  
+    reader.onload = function(e) {
+        let arrayBuffer = new Uint8Array(reader.result);
+        console.log(arrayBuffer);
+        uploadToEluvio(arrayBuffer);
+    }
+  
+    reader.readAsArrayBuffer(file)
+    
+}
 
-
-// Code for streaming video from the fabric: https://github.com/eluv-io/elv-stream-sample
-
-// From source
-import { ElvClient } from "@eluvio/elv-client-js";
-
-export default async function uploadToEluvio(arrayBuffer) {
+async function uploadToEluvio(arrayBuffer) {
     // NOTE: THIS IS THE DEMO NET, NOT the main net
     const client = await ElvClient.FromConfigurationUrl({
-        configUrl: "https://demov3.net955310.contentfabric.io/config"
+        configUrl: "https://demov3.net955210.contentfabric.io/config"
     });
 
 
@@ -20,16 +27,20 @@ export default async function uploadToEluvio(arrayBuffer) {
     // all use of the private key is done on the client.
     const wallet = client.GenerateWallet();
     const signer = wallet.AddAccount({
-        privateKey: "0x0000000000000000000000000000000000000000000000000000000000000000"
+        privateKey: "0x8145fe8c6bbf6e058fc2183ad8c6d4942a3d41ea5920b260dbf5beea06e3041b"
     });
 
     client.SetSigner({signer});
 
+    console.log("Library id");
+    let libraryId = "ilibVtQyvSaiKqyUjfPArSyhSe2Q51S"
 
     // Creating content code:
     const createResponse = await client.CreateContentObject({libraryId});
     const objectId = createResponse.id;
     const writeToken = createResponse.write_token;
+
+    console.log("Created response");
 
     await client.ReplaceMetadata({
     libraryId,
@@ -42,6 +53,8 @@ export default async function uploadToEluvio(arrayBuffer) {
         ]
     }
     });
+    
+    console.log("Replaced metadata");
 
     await client.UploadFiles({
     libraryId,
@@ -49,13 +62,14 @@ export default async function uploadToEluvio(arrayBuffer) {
     writeToken,
     fileInfo: [
         {
-        path: "image.jpg",
-        mime_type: "image/jpeg",
-        size: 10000,
+        path: "video.mp4",
+        mime_type: "video/mp4",
+        size: arrayBuffer.length,
         data: arrayBuffer
         }
     ]
     });
+    console.log("Uploaded file");
 
     const finalizeResponse = await client.FinalizeContentObject({
     libraryId,
@@ -64,4 +78,11 @@ export default async function uploadToEluvio(arrayBuffer) {
     });
 
     const versionHash = finalizeResponse.hash;
+
+    console.log("Version hash:")
+    console.log(versionHash);
+
+    document.getElementById("content-id").value = versionHash;
+
+    Load();
 }
