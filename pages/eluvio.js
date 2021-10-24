@@ -4,7 +4,7 @@
 // Code for streaming video from the fabric: https://github.com/eluv-io/elv-stream-sample
 
 // From source
-import { ElvClient } from "./elv-client-js/src/ElvClient";
+import { ElvClient } from "@eluvio/elv-client-js";
 
 export default async function uploadToEluvio(arrayBuffer) {
     // NOTE: THIS IS THE DEMO NET, NOT the main net
